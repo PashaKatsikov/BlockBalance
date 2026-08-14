@@ -21,31 +21,24 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import bp.goalsgames.blockbalance.R
 import bp.goalsgames.blockbalance.legal.LegalEndpoints
-import bp.goalsgames.blockbalance.legal.LegalPage
 import bp.goalsgames.blockbalance.ui.components.GhostButton
 import bp.goalsgames.blockbalance.ui.components.ScreenHeader
 import bp.goalsgames.blockbalance.ui.theme.Yard
 
 /**
- * Shows the policy or support page. The bundled copy is used whenever a public
- * address is missing or unreachable, so the buttons work offline and before any
- * domain is live.
+ * Shows the hosted privacy policy. The bundled copy is used when the public
+ * page is unreachable, so the button still works offline.
  */
 @Composable
 fun LegalScreen(
-    page: LegalPage,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val remote = LegalEndpoints.urlFor(page)
-    val local = LegalEndpoints.localUrlFor(page)
-    val title = when (page) {
-        LegalPage.PRIVACY -> stringResource(R.string.legal_privacy_title)
-        LegalPage.SUPPORT -> stringResource(R.string.legal_support_title)
-    }
+    val remote = LegalEndpoints.PRIVACY_URL
+    val local = LegalEndpoints.localUrl()
 
-    val client = remember(page) {
+    val client = remember {
         object : WebViewClient() {
             private var fellBack = false
 
@@ -75,15 +68,13 @@ fun LegalScreen(
     Column(modifier = modifier.background(Yard.night)) {
         Box(modifier = Modifier.statusBarsPadding()) {
             ScreenHeader(
-                title = title.uppercase(),
+                title = stringResource(R.string.legal_privacy_title).uppercase(),
                 onBack = onBack,
                 trailing = {
-                    if (remote != null) {
-                        GhostButton(
-                            label = stringResource(R.string.legal_open_browser),
-                            onClick = { openExternally(context, remote) },
-                        )
-                    }
+                    GhostButton(
+                        label = stringResource(R.string.legal_open_browser),
+                        onClick = { openExternally(context, remote) },
+                    )
                 },
             )
         }
@@ -100,7 +91,7 @@ fun LegalScreen(
                     settings.allowContentAccess = false
                     settings.domStorageEnabled = false
                     webViewClient = client
-                    loadUrl(remote ?: local)
+                    loadUrl(remote)
                 }
             },
             onRelease = { view ->

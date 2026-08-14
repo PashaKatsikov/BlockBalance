@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -6,6 +7,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
+
+val keystoreProps = Properties()
+val keystorePropsFile = rootProject.file("keystore/keystore.properties")
+if (keystorePropsFile.exists()) keystoreProps.load(keystorePropsFile.inputStream())
+val hasKeystore = keystorePropsFile.exists()
 
 android {
     namespace = "bp.goalsgames.blockbalance"
@@ -26,7 +32,6 @@ android {
         // masters that feed the launcher icon and the derived sprites, plus screens
         // this game has no feature for. None of that belongs in the APK.
         ignoreAssetsPatterns += listOf(
-            "*_Loading_Screen.webp",
             "*_Notifications_Screen.webp",
             "*_Nowifi_Screen.webp",
             "Game_Name.png",
@@ -52,6 +57,15 @@ android {
         buildConfig = true
     }
 
+    signingConfigs {
+        if (hasKeystore) create("release") {
+            storeFile = file(keystoreProps["storeFile"] as String)
+            storePassword = keystoreProps["storePassword"] as String
+            keyAlias = keystoreProps["keyAlias"] as String
+            keyPassword = keystoreProps["keyPassword"] as String
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
@@ -60,6 +74,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            if (hasKeystore) signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

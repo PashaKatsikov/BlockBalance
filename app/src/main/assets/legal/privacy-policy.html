@@ -2,102 +2,229 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
     <title>Block Balance — Privacy Policy</title>
     <style>
-        :root { color-scheme: dark; }
-        body {
-            margin: 0;
-            padding: 28px 22px 56px;
-            background: #101a2c;
-            color: #e8eefc;
-            font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
+        :root {
+            color-scheme: dark light;
+            --bg: #101a2c;
+            --panel: #16233c;
+            --stroke: #2b3f66;
+            --ink: #e8eefc;
+            --muted: #a9bada;
+            --soft: #8ea0c4;
+            --gold: #ffc945;
+            --sky: #7fc4ff;
+            --link: #7fc4ff;
         }
-        h1 { font-size: 26px; margin: 0 0 6px; color: #ffc945; }
-        h2 { font-size: 18px; margin: 28px 0 8px; color: #7fc4ff; }
-        p, li { font-size: 15px; color: #cfd9ee; }
-        ul { padding-left: 20px; }
-        .meta { font-size: 13px; color: #8ea0c4; margin-bottom: 22px; }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f4f6fb;
+                --panel: #ffffff;
+                --stroke: #d5deee;
+                --ink: #152033;
+                --muted: #3d4d66;
+                --soft: #5b6b86;
+                --gold: #b45309;
+                --sky: #155eab;
+                --link: #155eab;
+            }
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.65;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 28px 22px calc(48px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .brand {
+            font-size: 13px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 700;
+            margin: 0 0 10px;
+        }
+
+        h1 {
+            font-size: 28px;
+            line-height: 1.2;
+            margin: 0 0 8px;
+            color: var(--ink);
+        }
+
+        .meta {
+            margin: 0 0 22px;
+            color: var(--soft);
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 28px 0 8px;
+            color: var(--sky);
+        }
+
+        p, li {
+            font-size: 16px;
+            color: var(--muted);
+        }
+
+        p { margin: 0 0 12px; }
+
+        ul {
+            margin: 0 0 12px;
+            padding-left: 1.2em;
+        }
+
+        li { margin: 0 0 6px; }
+
+        a {
+            color: var(--link);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
         .card {
-            background: #16233c;
-            border: 1px solid #26375a;
+            background: var(--panel);
+            border: 1px solid var(--stroke);
             border-radius: 14px;
             padding: 16px 18px;
-            margin-top: 22px;
+            margin: 22px 0 0;
         }
-        a { color: #7fc4ff; }
+
+        .card h2 { margin-top: 0; }
+
+        .card p:last-child { margin-bottom: 0; }
     </style>
 </head>
 <body>
-<h1>Privacy Policy</h1>
-<p class="meta">Block Balance &middot; last updated 14 August 2026</p>
+    <main class="wrap">
+        <p class="brand">Block Balance</p>
+        <h1>Privacy Policy</h1>
+        <p class="meta">Effective Date: August 2026</p>
 
-<p>
-    Block Balance is a single player casual game. It is built so that playing it
-    requires no account, no sign-in and no personal data.
-</p>
+        <p>
+            Developer (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) operates the Block Balance
+            mobile application (&quot;Service&quot;). This Privacy Policy explains how
+            information is collected, used, and protected when you use the Service.
+        </p>
 
-<h2>What the game stores</h2>
-<p>
-    Your progress is written to private storage on your own device and never
-    leaves it. That record contains only game values:
-</p>
-<ul>
-    <li>in-game credit balance and experience</li>
-    <li>owned and equipped cosmetic items</li>
-    <li>selected risk tier and last used stake</li>
-    <li>daily reward streak and daily quest state</li>
-    <li>personal best height, payout and streak</li>
-</ul>
-<p>
-    Uninstalling the game, or using <em>Reset progress</em> in Settings, removes
-    that record.
-</p>
+        <h2>Information We Collect</h2>
+        <p>
+            The Service may collect limited technical information necessary for
+            operation and improvement of the application, including:
+        </p>
+        <ul>
+            <li>Device type and model</li>
+            <li>Operating system version</li>
+            <li>Anonymous usage statistics</li>
+            <li>Diagnostic and crash information</li>
+            <li>IP address (when required for security and analytics purposes)</li>
+        </ul>
+        <p>
+            We do not intentionally collect sensitive personal information such as
+            financial account details, government-issued identification numbers,
+            or biometric data.
+        </p>
 
-<h2>What the game does not do</h2>
-<ul>
-    <li>no advertising and no ad identifiers</li>
-    <li>no analytics or crash reporting services</li>
-    <li>no purchases and no payment processing</li>
-    <li>no access to contacts, photos, location or microphone</li>
-    <li>no accounts, no profiles, no cloud sync</li>
-</ul>
+        <h2>How We Use Information</h2>
+        <ul>
+            <li>Provide and maintain the Service</li>
+            <li>Improve app functionality and user experience</li>
+            <li>Monitor application performance and stability</li>
+            <li>Detect, prevent, and resolve technical issues</li>
+            <li>Comply with legal obligations</li>
+        </ul>
 
-<h2>Weekly ranks</h2>
-<p>
-    The weekly rank table is generated on your device. The rival entries are
-    computer generated for the current week and are not other players. No score
-    is uploaded anywhere.
-</p>
+        <h2>Data Storage and Security</h2>
+        <p>
+            We take reasonable measures to protect information from unauthorized
+            access, alteration, disclosure, or destruction. However, no method of
+            electronic transmission or storage is completely secure.
+        </p>
 
-<h2>Network use</h2>
-<p>
-    The game itself runs fully offline. A network connection is only used if you
-    open this policy page or the support page from the live web instead of the
-    copy bundled with the app.
-</p>
+        <h2>Third-Party Services</h2>
+        <p>
+            The Service may use third-party providers for analytics, crash
+            reporting, hosting, or other operational purposes. These providers may
+            process information solely to provide services on our behalf.
+        </p>
 
-<h2>Children</h2>
-<p>
-    The game contains no real money gambling, no purchases and no social
-    features. In-game credits have no cash value and cannot be bought, sold or
-    transferred.
-</p>
+        <h2>Data Retention</h2>
+        <p>
+            We retain information only for as long as necessary to provide the
+            Service, comply with legal obligations, resolve disputes, and enforce
+            agreements.
+        </p>
 
-<h2>Your choices</h2>
-<p>
-    Because nothing is collected or transmitted, there is no remote data to
-    export or delete. You control the local record through Android app storage
-    settings and the in-game reset option.
-</p>
+        <h2>Data Deletion</h2>
+        <p>Users have the right to request deletion of their personal data.</p>
+        <p>
+            To request deletion of data associated with Block Balance, please
+            contact us at
+            <a href="mailto:support@blockbalance.com">support@blockbalance.com</a>.
+        </p>
+        <p>
+            When submitting a deletion request, please provide sufficient
+            information to identify your account or device. Verified requests will
+            be processed within a reasonable timeframe.
+        </p>
+        <p>
+            If the application stores data only on the user&apos;s device, users may
+            permanently delete all stored data by uninstalling the application and
+            clearing the application&apos;s local storage.
+        </p>
 
-<div class="card">
-    <h2 style="margin-top:0">Contact</h2>
-    <p>
-        Questions about this policy can be sent to the developer contact address
-        shown on the Google Play store listing for Block Balance.
-    </p>
-</div>
+        <h2>Your Rights</h2>
+        <p>
+            Depending on your location, you may have rights regarding access,
+            correction, deletion, restriction, or portability of your personal
+            data under applicable privacy laws, including the GDPR.
+        </p>
+
+        <h2>Children&apos;s Privacy</h2>
+        <p>
+            The Service is not intended for children under the age of 18, and we
+            do not knowingly collect personal information from children.
+        </p>
+
+        <h2>Changes to This Privacy Policy</h2>
+        <p>
+            We may update this Privacy Policy from time to time. Changes become
+            effective when posted on this page. Users are encouraged to review
+            this policy periodically.
+        </p>
+
+        <div class="card">
+            <h2>Contact Us</h2>
+            <p>
+                If you have questions about this Privacy Policy or wish to exercise
+                your privacy rights, please contact:
+            </p>
+            <p>
+                Developer: Block Balance<br>
+                Email:
+                <a href="mailto:support@blockbalance.com">support@blockbalance.com</a>
+            </p>
+        </div>
+    </main>
 </body>
 </html>

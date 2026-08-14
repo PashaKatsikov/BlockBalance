@@ -32,7 +32,6 @@ import bp.goalsgames.blockbalance.BuildConfig
 import bp.goalsgames.blockbalance.R
 import bp.goalsgames.blockbalance.core.RiskTier
 import bp.goalsgames.blockbalance.data.PlayerProfile
-import bp.goalsgames.blockbalance.legal.LegalPage
 import bp.goalsgames.blockbalance.ui.ShellViewModel
 import bp.goalsgames.blockbalance.ui.components.GhostButton
 import bp.goalsgames.blockbalance.ui.components.ScreenHeader
@@ -46,7 +45,7 @@ fun SettingsScreen(
     profile: PlayerProfile,
     shell: ShellViewModel,
     onBack: () -> Unit,
-    onLegal: (LegalPage) -> Unit,
+    onPrivacy: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var confirmReset by remember { mutableStateOf(false) }
@@ -91,12 +90,7 @@ fun SettingsScreen(
                     ) {
                         GhostButton(
                             label = stringResource(R.string.legal_privacy_title).uppercase(),
-                            onClick = { onLegal(LegalPage.PRIVACY) },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        GhostButton(
-                            label = stringResource(R.string.legal_support_title).uppercase(),
-                            onClick = { onLegal(LegalPage.SUPPORT) },
+                            onClick = onPrivacy,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }

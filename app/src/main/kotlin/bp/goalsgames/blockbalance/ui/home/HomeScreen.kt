@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import bp.goalsgames.blockbalance.R
 import bp.goalsgames.blockbalance.core.Economy
 import bp.goalsgames.blockbalance.data.PlayerProfile
-import bp.goalsgames.blockbalance.legal.LegalPage
 import bp.goalsgames.blockbalance.stage.Art
 import bp.goalsgames.blockbalance.ui.ShellViewModel
 import bp.goalsgames.blockbalance.ui.bonus.BonusDialog
@@ -60,7 +59,7 @@ fun HomeScreen(
     onQuests: () -> Unit,
     onLadder: () -> Unit,
     onSettings: () -> Unit,
-    onLegal: (LegalPage) -> Unit,
+    onPrivacy: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var bonusOpen by remember { mutableStateOf(false) }
@@ -219,21 +218,11 @@ fun HomeScreen(
                         )
                     }
 
-                    Row(
+                    GhostButton(
+                        label = stringResource(R.string.home_privacy),
+                        onClick = onPrivacy,
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        GhostButton(
-                            label = stringResource(R.string.home_privacy),
-                            onClick = { onLegal(LegalPage.PRIVACY) },
-                            modifier = Modifier.weight(1f),
-                        )
-                        GhostButton(
-                            label = stringResource(R.string.home_support),
-                            onClick = { onLegal(LegalPage.SUPPORT) },
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
+                    )
 
                     Spacer(modifier = Modifier.height(2.dp))
                 }

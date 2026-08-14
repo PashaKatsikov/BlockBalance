@@ -82,7 +82,9 @@ fun BootScreen(
     )
 
     Box(modifier = modifier.background(Yard.night), contentAlignment = Alignment.Center) {
-        val backdrop = rememberAssetImage(Art.MENU_BACKDROP)
+        val backdrop = rememberAssetImage(
+            if (landscape) Art.LOADING_LANDSCAPE else Art.LOADING_PORTRAIT,
+        )
         if (backdrop != null) {
             Image(
                 bitmap = backdrop,

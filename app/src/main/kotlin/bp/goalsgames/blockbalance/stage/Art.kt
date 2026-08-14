@@ -19,6 +19,8 @@ object Art {
     const val BUILD_PLATE = "gameplay/button_asset.webp"
 
     const val MENU_BACKDROP = "ui/menu_bg.png"
+    const val LOADING_PORTRAIT = "ui/Vertical_Loading_Screen.webp"
+    const val LOADING_LANDSCAPE = "ui/Horizontal_Loading_Screen.webp"
 
     val cloudSprites = listOf(CLOUD_SOFT, CLOUD_WISP)
 
@@ -33,5 +35,12 @@ object Art {
     }
 
     /** Menu and overlay art, loaded together with the yard on the boot screen. */
-    fun shellAssets(): List<String> = listOf(MENU_BACKDROP, LOGO, PLATE, BUILD_PLATE)
+    fun shellAssets(): List<String> = listOf(
+        MENU_BACKDROP,
+        LOADING_PORTRAIT,
+        LOADING_LANDSCAPE,
+        LOGO,
+        PLATE,
+        BUILD_PLATE,
+    )
 }
