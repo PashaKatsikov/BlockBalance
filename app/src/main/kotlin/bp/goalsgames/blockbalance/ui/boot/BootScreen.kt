@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -81,7 +80,7 @@ fun BootScreen(
         label = "boot-progress",
     )
 
-    Box(modifier = modifier.background(Yard.night), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.background(Yard.night)) {
         val backdrop = rememberAssetImage(
             if (landscape) Art.LOADING_LANDSCAPE else Art.LOADING_PORTRAIT,
         )
@@ -93,54 +92,25 @@ fun BootScreen(
                 contentScale = ContentScale.Crop,
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Yard.night.copy(alpha = 0.25f),
-                            Yard.night.copy(alpha = 0.82f),
-                        ),
-                    ),
-                ),
-        )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 28.dp, vertical = 34.dp),
+                .navigationBarsPadding()
+                .padding(horizontal = 28.dp, vertical = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Bottom,
         ) {
-            val logo = rememberAssetImage(Art.LOGO, widthFraction = 0.9f)
-            if (logo != null) {
-                Image(
-                    bitmap = logo,
-                    contentDescription = stringResource(R.string.app_name),
-                    modifier = Modifier.fillMaxWidth(if (landscape) 0.42f else 0.82f),
-                    contentScale = ContentScale.FillWidth,
-                )
-            } else {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.displayMedium.copy(color = Yard.gold),
-                )
-            }
-
-            Box(modifier = Modifier.height(38.dp))
-
-            MeterBar(
-                ratio = eased,
-                modifier = Modifier.fillMaxWidth(if (landscape) 0.34f else 0.62f),
-                thickness = 12.dp,
-            )
-
-            Box(modifier = Modifier.height(14.dp))
-
             Text(
                 text = stringResource(R.string.boot_status),
-                style = MaterialTheme.typography.bodyMedium.copy(color = Yard.inkSoft),
+                style = MaterialTheme.typography.titleMedium.copy(color = Yard.ink),
+            )
+            MeterBar(
+                ratio = eased,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth(if (landscape) 0.42f else 0.72f),
+                thickness = 12.dp,
             )
         }
     }

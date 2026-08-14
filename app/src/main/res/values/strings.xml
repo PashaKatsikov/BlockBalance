@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Block Balance</string>
 
-    <string name="boot_status">Warming up the yard…</string>
+    <string name="boot_status">Loading</string>
 
     <string name="home_play">PLAY</string>
     <string name="home_bonus">Daily</string>
