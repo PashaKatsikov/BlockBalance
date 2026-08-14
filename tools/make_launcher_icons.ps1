@@ -3,7 +3,7 @@
 Add-Type -AssemblyName System.Drawing
 
 $root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$source = Join-Path $root 'assets/icon.png'
+$source = Join-Path $root 'assets/icon_new.png'
 $resDir = Join-Path $root 'app/src/main/res'
 
 if (-not (Test-Path $source)) { throw "Master icon not found: $source" }
