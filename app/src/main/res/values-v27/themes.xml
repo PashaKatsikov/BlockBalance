@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cutout handling only exists from API 27; the base theme covers older devices. -->
+    <style name="Theme.BlockBalance" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/yard_night</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+</resources>
