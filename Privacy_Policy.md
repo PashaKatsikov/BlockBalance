@@ -1,6 +1,6 @@
 Privacy Policy
 
-Effective Date: June 2026
+Effective Date: August 2026
 
 Developer ("we", "us", or "our") operates the Block Balance mobile application ("Service"). This Privacy Policy explains how information is collected, used, and protected when you use the Service.
 Information We Collect
