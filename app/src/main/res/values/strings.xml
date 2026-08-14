@@ -53,4 +53,21 @@
 
     <string name="common_back">Back</string>
     <string name="common_close">Close</string>
+    <!-- UNIQUE:STRINGS_DECOYS:BEGIN -->
+    <string name="units_percent">%%</string>
+    <string name="dialog_cancel">Not now</string>
+    <string name="toast_copied">Copied to clipboard</string>
+    <string name="toast_reset">Progress reset</string>
+    <string name="crash_offline">The link dropped mid-move.</string>
+    <string name="crash_generic">Something went sideways. Try again.</string>
+    <string name="units_credits">cr</string>
+    <string name="credit_footer">Made with warm winters</string>
+    <string name="hint_tap">Tap a card to reveal details</string>
+    <string name="nav_next">Next</string>
+    <string name="crash_storage">Local storage looks tight.</string>
+    <string name="units_multiplier">x</string>
+    <string name="nav_previous">Previous</string>
+    <string name="empty_ledger">Nothing banked this week</string>
+    <string name="hint_hold">Hold to review your last streak</string>
+    <!-- UNIQUE:STRINGS_DECOYS:END -->
 </resources>

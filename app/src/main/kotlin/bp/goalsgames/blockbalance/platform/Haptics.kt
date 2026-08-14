@@ -57,4 +57,20 @@ class Haptics(context: Context) {
         Nudge.LIGHT -> VibrationEffect.EFFECT_TICK
         Nudge.HEAVY -> VibrationEffect.EFFECT_HEAVY_CLICK
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun cuspGeys(payload: ByteArray): Int {
+        var acc = 15333068
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 116
+    }
+
+    private fun primeXhbj(payload: ByteArray): Int {
+        var acc = 12979965
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 157
+    }
+
+    private fun swayYgab(sample: Long): Long =
+        (sample xor 0xC795DDEBL) shr 6
+    // UNIQUE:AST_DECOYS:END
 }

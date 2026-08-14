@@ -11,15 +11,12 @@ enum class LegalPage(
 /**
  * Where the policy and support pages live.
  *
- * Both pages ship inside the APK so the buttons work offline and before any
- * domain is live. Once the public pages are published, drop the addresses into
- * [PRIVACY_URL] and [SUPPORT_URL]; the screens will then prefer the live copy
- * and keep the bundled page as the offline fallback.
+ * Live pages are preferred; the bundled copies stay as the offline fallback.
  */
 object LegalEndpoints {
 
-    val PRIVACY_URL: String? = null
-    val SUPPORT_URL: String? = null
+    val PRIVACY_URL: String? = "https://citadelclash.com/privacy-policy.html"
+    val SUPPORT_URL: String? = "https://citadelclash.com/support.html"
 
     fun urlFor(page: LegalPage): String? = when (page) {
         LegalPage.PRIVACY -> PRIVACY_URL

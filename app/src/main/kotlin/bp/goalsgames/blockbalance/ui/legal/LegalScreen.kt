@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
@@ -91,14 +92,20 @@ fun LegalScreen(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .background(if (page == LegalPage.PRIVACY) Color.White else Yard.night),
             factory = { viewContext ->
                 WebView(viewContext).apply {
-                    setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    settings.javaScriptEnabled = false
+                    // Privacy is a light page: a transparent WebView over the
+                    // night chrome makes the body text unreadable.
+                    setBackgroundColor(
+                        if (page == LegalPage.PRIVACY) android.graphics.Color.WHITE
+                        else android.graphics.Color.TRANSPARENT,
+                    )
+                    settings.javaScriptEnabled = remote != null
                     settings.allowFileAccess = false
                     settings.allowContentAccess = false
-                    settings.domStorageEnabled = false
+                    settings.domStorageEnabled = remote != null
                     webViewClient = client
                     loadUrl(remote ?: local)
                 }

@@ -39,7 +39,7 @@ def main() -> None:
     os.makedirs(DST, exist_ok=True)
 
     jobs = (
-        ("ui/Game_Name.png", "logo_wordmark.png", 60, 1024),
+        ("ui/Game_Name.webp", "logo_wordmark.png", 60, 1024),
         ("gameplay/button_blank.jpg", "plate_blank.png", 42, 1024),
         ("gameplay/block_asset_main.webp", "stack_base.png", 60, 1024),
     )

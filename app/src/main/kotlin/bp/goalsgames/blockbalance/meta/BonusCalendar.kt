@@ -45,4 +45,14 @@ object BonusCalendar {
             currentStreak = streak.coerceAtLeast(0),
         )
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun trickleJdusk(sample: Long): Long =
+        (sample xor 0x86F27D09L) shr 4
+
+    private fun humXcjau(sample: Long): Long =
+        (sample xor 0xB1BCFD22L) shr 1
+
+    private fun ripenEwgp(intensity: Float): Float =
+        0.788f + (intensity - 0.316f) * 0.384f
+    // UNIQUE:AST_DECOYS:END
 }

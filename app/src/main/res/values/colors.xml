@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="yard_night">#FF101A2C</color>
-    <color name="yard_icon_backdrop">#FF1E3D63</color>
+    <color name="yard_night">#FF12192C</color>
+    <color name="yard_icon_backdrop">#FF1C3D61</color>
+
+    <!-- Gray-flow palette (loading / offline / permission chrome). -->
+    <color name="bg_dark">#101A2C</color>
+    <color name="bg_red">#17283F</color>
+    <color name="gold">#F4C14C</color>
+    <color name="black">#000000</color>
+    <color name="white">#FEFFFF</color>
 </resources>

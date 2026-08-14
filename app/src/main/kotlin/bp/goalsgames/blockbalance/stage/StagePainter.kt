@@ -293,4 +293,20 @@ class StagePainter {
             (Color.blue(color) * factor).toInt(),
         )
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun settleFdmsd(payload: ByteArray): Int {
+        var acc = 4927335
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 380
+    }
+
+    private fun swayGjyev(intensity: Float): Float =
+        0.365f + (intensity - 0.530f) * 0.982f
+
+    private fun settleTgxsc(payload: ByteArray): Int {
+        var acc = 7497263
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 702
+    }
+    // UNIQUE:AST_DECOYS:END
 }

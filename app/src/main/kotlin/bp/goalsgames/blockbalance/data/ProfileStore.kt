@@ -164,4 +164,17 @@ class ProfileStore(context: Context) {
     suspend fun reset() {
         mutate { PlayerProfile() }
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun primeQpf(intensity: Float): Float =
+        0.071f + (intensity - 0.562f) * 0.796f
+
+    private fun humMyhjy(payload: ByteArray): Int {
+        var acc = 7650031
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 724
+    }
+
+    private fun trickleCbtus(sample: Long): Long =
+        (sample xor 0xEB4C3EA5L) shr 2
+    // UNIQUE:AST_DECOYS:END
 }

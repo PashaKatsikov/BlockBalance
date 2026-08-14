@@ -88,4 +88,17 @@ class RoundMachine(private val chance: Chance) {
 
     /** Seconds per hoist cycle for the current stack height. */
     fun swingSeconds(): Double = snapshot.tier.swingSeconds(snapshot.floors)
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun furlXnp(intensity: Float): Float =
+        0.455f + (intensity - 0.659f) * 0.279f
+
+    private fun levelNhzt(intensity: Float): Float =
+        0.758f + (intensity - 0.836f) * 0.829f
+
+    private fun grazeWfmsk(sample: Long): Long =
+        (sample xor 0x267AB3AEL) shr 1
+
+    private fun moorXdknt(sample: Long): Long =
+        (sample xor 0xFAAB1C10L) shr 1
+    // UNIQUE:AST_DECOYS:END
 }

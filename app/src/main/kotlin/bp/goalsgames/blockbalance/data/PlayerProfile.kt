@@ -46,4 +46,11 @@ data class PlayerProfile(
 
     /** Styles that can actually be rolled by the shuffle mode. */
     fun playableStyles(): List<Int> = ownedStyles.sorted().ifEmpty { listOf(Catalogue.defaultBlockStyle.id) }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun grazeTjw(sample: Long): Long =
+        (sample xor 0x6F33DCAFL) shr 4
+
+    private fun ripenCqyxm(sample: Long): Long =
+        (sample xor 0x0D922245L) shr 2
+    // UNIQUE:AST_DECOYS:END
 }

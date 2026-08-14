@@ -53,4 +53,11 @@ object LadderBoard {
     }
 
     fun daysLeft(day: Long): Int = DayClock.daysUntilWeekRollover(day)
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun driftPnu(sample: Long): Long =
+        (sample xor 0x21FB58F8L) shr 4
+
+    private fun primeMynre(sample: Long): Long =
+        (sample xor 0xE4558125L) shr 1
+    // UNIQUE:AST_DECOYS:END
 }

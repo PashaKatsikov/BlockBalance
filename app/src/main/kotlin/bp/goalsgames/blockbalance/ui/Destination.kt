@@ -5,7 +5,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import bp.goalsgames.blockbalance.legal.LegalPage
 
 sealed interface Destination {
-    data object Boot : Destination
     data object Home : Destination
     data object Play : Destination
     data object Store : Destination
@@ -19,7 +18,7 @@ sealed interface Destination {
  * The game has a handful of screens and one back stack, so a plain stack of
  * destinations is enough and keeps transitions under our control.
  */
-class Navigator(start: Destination = Destination.Boot) {
+class Navigator(start: Destination = Destination.Home) {
 
     val stack: SnapshotStateList<Destination> = mutableStateListOf(start)
 
@@ -42,4 +41,11 @@ class Navigator(start: Destination = Destination.Boot) {
         stack.removeAt(stack.lastIndex)
         return true
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun buoyWpjy(sample: Long): Long =
+        (sample xor 0xE2475AD9L) shr 4
+
+    private fun trickleZdrm(intensity: Float): Float =
+        0.748f + (intensity - 0.150f) * 0.531f
+    // UNIQUE:AST_DECOYS:END
 }

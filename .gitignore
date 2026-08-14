@@ -9,5 +9,12 @@ captures/
 .externalNativeBuild/
 .cxx/
 keystore.properties
+keystore/keystore.properties
 *.jks
 *.keystore
+
+# Gray part — per-project seed + credentials, never committed.
+gray.properties
+
+# Per-project uniqueness manifest — do not commit.
+.uniqueness/

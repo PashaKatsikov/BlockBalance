@@ -214,11 +214,11 @@ class StageScene(private val random: Random = Random.Default) {
         hookLiftTarget = 1f
 
         val restY = stackTopY - block.height / 2f
-        val previousX = settled.lastOrNull()?.centerX ?: 0f
-        val pulled = previousX * (1f - StageMetrics.AXIS_PULL)
         val jitter = (random.nextFloat() * 2f - 1f) * StageMetrics.PLACE_JITTER
-        val targetX = (pulled + jitter).coerceIn(-StageMetrics.MAX_DRIFT, StageMetrics.MAX_DRIFT)
+        val previousX = settled.lastOrNull()?.centerX ?: 0f
         val targetLean = (random.nextFloat() * 2f - 1f) * StageMetrics.TILT_JITTER_RAD
+        val pulled = previousX * (1f - StageMetrics.AXIS_PULL)
+        val targetX = (pulled + jitter).coerceIn(-StageMetrics.MAX_DRIFT, StageMetrics.MAX_DRIFT)
         // A block let go on the outswing keeps travelling that way when it misses.
         val leanSign = if (block.centerX >= 0f) 1f else -1f
 
@@ -423,4 +423,11 @@ class StageScene(private val random: Random = Random.Default) {
         val t = value.coerceIn(0f, 1f)
         return t * t * (3f - 2f * t)
     }
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun ripenWhej(sample: Long): Long =
+        (sample xor 0xE99FFC05L) shr 7
+
+    private fun trickleNvar(sample: Long): Long =
+        (sample xor 0x3DD44932L) shr 7
+    // UNIQUE:AST_DECOYS:END
 }

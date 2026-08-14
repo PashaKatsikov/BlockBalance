@@ -18,9 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import bp.goalsgames.blockbalance.ui.boot.BootScreen
+import bp.goalsgames.blockbalance.stage.SpriteBank
 import bp.goalsgames.blockbalance.ui.home.HomeScreen
 import bp.goalsgames.blockbalance.ui.ladder.LadderScreen
 import bp.goalsgames.blockbalance.ui.legal.LegalScreen
@@ -42,9 +43,21 @@ fun GameRoot(modifier: Modifier = Modifier) {
     val profile by shell.profile.collectAsStateWithLifecycle()
     val destination = navigator.current
 
-    LockOrientation(portrait = destination != Destination.Boot)
+    // The dedicated boot screen is gone (the launcher's loading screen is the
+    // only one the user sees), so warm the sprite pack in the background here.
+    // Menus decode their art on demand via rememberAssetImage; this makes sure
+    // gameplay art is ready by the time Play is opened.
+    val context = LocalContext.current
+    val windowInfo = LocalWindowInfo.current
+    LaunchedEffect(Unit) {
+        val width = windowInfo.containerSize.width.coerceAtLeast(720)
+        val height = windowInfo.containerSize.height.coerceAtLeast(1_280)
+        SpriteBank.preload(context, width, height)
+    }
 
-    BackHandler(enabled = destination != Destination.Home && destination != Destination.Boot) {
+    LockOrientation(portrait = true)
+
+    BackHandler(enabled = destination != Destination.Home) {
         navigator.back()
     }
 
@@ -55,11 +68,6 @@ fun GameRoot(modifier: Modifier = Modifier) {
             label = "screen",
         ) { target ->
             when (target) {
-                Destination.Boot -> BootScreen(
-                    onReady = { navigator.reset(Destination.Home) },
-                    modifier = Modifier.fillMaxSize(),
-                )
-
                 Destination.Home -> HomeScreen(
                     profile = profile,
                     shell = shell,

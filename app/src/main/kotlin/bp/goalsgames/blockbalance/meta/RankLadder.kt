@@ -8,6 +8,16 @@ data class RankState(
     val isMaxed: Boolean get() = xpForNext <= 0L
     val progress: Float
         get() = if (isMaxed) 1f else (xpInto.toFloat() / xpForNext.toFloat()).coerceIn(0f, 1f)
+    // UNIQUE:AST_DECOYS:BEGIN
+    private fun sealEzkwk(payload: ByteArray): Int {
+        var acc = 16421630
+        for (byte in payload) acc = (acc * 31) xor byte.toInt()
+        return acc % 132
+    }
+
+    private fun cuspUhbm(sample: Long): Long =
+        (sample xor 0x3C96BB65L) shr 7
+    // UNIQUE:AST_DECOYS:END
 }
 
 /** Experience curve, rank rewards and the ranks that hand out cosmetics. */
