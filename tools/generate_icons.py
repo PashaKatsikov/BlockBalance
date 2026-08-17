@@ -1,10 +1,18 @@
 """One-shot icon generator for the launcher icon set.
 
-Mirrors the layout that was already in place before this refresh:
-- adaptive layers `ic_launcher_background` and `ic_launcher_foreground`
-  are the SAME full-bleed square PNG at 108 dp per density,
-- legacy `ic_launcher` is that same square resized to 48 dp per density,
-- legacy `ic_launcher_round` is the same square with a circular mask.
+Adaptive-icon layout — the two layers do different jobs:
+
+* ic_launcher_foreground: source drawn INSIDE the 66 dp inner safe circle of
+  the 108 dp canvas. That way every launcher mask (round / squircle / square
+  / teardrop) hits transparent padding, never the artwork — nothing is cropped.
+* ic_launcher_background: the source itself, upscaled to fill the whole 108 dp
+  canvas and softened with a small blur. The mask crops this, and what it
+  crops is a soft continuation of the image, so the icon reads as full-bleed
+  with no empty band.
+
+Legacy raster (`ic_launcher`, `ic_launcher_round`) is only shown on very old
+launchers and in a few Android chrome spots that never mask the icon. Keeping
+them at full 48 dp full-bleed matches the historical layout for those cases.
 
 Run:  python tools/generate_icons.py <source.png>
 """
@@ -14,7 +22,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 # Base density is mdpi at 48 dp for the legacy raster and 108 dp for the
 # adaptive layers. Everything else scales by the DPI bucket factor.
@@ -27,6 +35,14 @@ DENSITIES = {
 }
 LEGACY_BASE = 48
 ADAPTIVE_BASE = 108
+# How large the artwork sits inside the 108 dp adaptive canvas. Android
+# guarantees only the inner 66 dp survives every launcher mask, but every
+# launcher we ship to shows at least ~75 dp of the canvas (Pixel squircle,
+# OneUI square, MIUI teardrop all clear that much). Going bigger than the
+# strict guarantee makes the icon fill visibly more of the tile — the source
+# already has sky/clouds around the tower, so the outer sliver a very tight
+# circular mask might still clip is filler pixels, not content.
+SAFE_INNER_DP = 75
 
 
 def resample(src: Image.Image, size: int) -> Image.Image:
@@ -39,6 +55,23 @@ def circular(square: Image.Image) -> Image.Image:
     out = Image.new("RGBA", square.size, (0, 0, 0, 0))
     out.paste(square, (0, 0), mask=mask)
     return out
+
+
+def foreground_layer(src: Image.Image, canvas: int) -> Image.Image:
+    """Full source shrunk to the safe inner square, centred on a clear canvas."""
+    inner = round(canvas * SAFE_INNER_DP / ADAPTIVE_BASE)
+    inner_img = resample(src, inner)
+    out = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
+    offset = (canvas - inner) // 2
+    out.paste(inner_img, (offset, offset), mask=inner_img.split()[-1])
+    return out
+
+
+def background_layer(src: Image.Image, canvas: int) -> Image.Image:
+    """Full source scaled to the whole canvas, softened so mask cuts blend in."""
+    full = resample(src.convert("RGB"), canvas)
+    blurred = full.filter(ImageFilter.GaussianBlur(radius=canvas * 0.045))
+    return blurred.convert("RGBA")
 
 
 def main(source_path: str) -> None:
@@ -59,11 +92,15 @@ def main(source_path: str) -> None:
         square.save(folder / "ic_launcher.png", optimize=True)
         circular(square).save(folder / "ic_launcher_round.png", optimize=True)
 
-        layer = resample(src, adaptive_size)
-        layer.save(folder / "ic_launcher_background.png", optimize=True)
-        layer.save(folder / "ic_launcher_foreground.png", optimize=True)
+        foreground_layer(src, adaptive_size).save(
+            folder / "ic_launcher_foreground.png", optimize=True
+        )
+        background_layer(src, adaptive_size).save(
+            folder / "ic_launcher_background.png", optimize=True
+        )
 
-        print(f"{bucket}: legacy {legacy_size}px, adaptive {adaptive_size}px")
+        print(f"{bucket}: legacy {legacy_size}px, adaptive {adaptive_size}px "
+              f"(safe inner {round(adaptive_size * SAFE_INNER_DP / ADAPTIVE_BASE)}px)")
 
 
 if __name__ == "__main__":

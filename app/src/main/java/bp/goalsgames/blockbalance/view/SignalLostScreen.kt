@@ -33,10 +33,19 @@ class SignalLostScreen : AppCompatActivity() {
     private var retryBtn: TextView? = null
     private var returnUrl: String? = null
 
+    /**
+     * True when we landed here because the destination URL is stuck (redirect
+     * loop, unresolvable chain), not because the network is down. In that case
+     * the connectivity flow is a bad trigger — it fires the moment we subscribe
+     * (already online) and would march us back into the same broken URL.
+     */
+    private var urlStuck: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         wire = Uplink(applicationContext)
         returnUrl = intent.getStringExtra(EXTRA_RETURN_URL)
+        urlStuck = intent.getBooleanExtra(EXTRA_URL_STUCK, false)
 
         val isLandscape = resources.configuration.orientation ==
                 android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -72,9 +81,13 @@ class SignalLostScreen : AppCompatActivity() {
         setContentView(root)
         bp.goalsgames.blockbalance.WindowGlue.apply(this)
 
-        scope.launch {
-            wire.connectivityFlow.collect { online ->
-                if (online) tryRetry()
+        // Only auto-retry on connectivity change when we're actually here for
+        // an offline problem. See `urlStuck`.
+        if (!urlStuck) {
+            scope.launch {
+                wire.connectivityFlow.collect { online ->
+                    if (online) tryRetry()
+                }
             }
         }
     }
@@ -83,7 +96,9 @@ class SignalLostScreen : AppCompatActivity() {
         retryBtn?.text = "Connecting..."
         retryBtn?.isEnabled = false
         scope.launch {
-            val ok = wire.hasRealInternet()
+            // A stuck URL is not a connectivity problem, so a network probe
+            // says nothing about whether trying again will work. Just try.
+            val ok = urlStuck || wire.hasRealInternet()
             if (ok) {
                 val next = if (!returnUrl.isNullOrBlank()) {
                     Intent(this@SignalLostScreen, OrbitShell::class.java)
@@ -130,5 +145,6 @@ class SignalLostScreen : AppCompatActivity() {
 
     companion object {
         const val EXTRA_RETURN_URL = "offline_return_url"
+        const val EXTRA_URL_STUCK = "url_stuck"
     }
 }

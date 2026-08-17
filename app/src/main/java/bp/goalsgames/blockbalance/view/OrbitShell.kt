@@ -73,6 +73,17 @@ class OrbitShell : AppCompatActivity() {
     private var entryPointRetried = false
     private var rendererRecoveries = 0
 
+    /**
+     * True between onStart and onStop. Connectivity callbacks fire while the app
+     * is backgrounded — Android tears down default networks to save battery,
+     * Wi-Fi enters power save on screen-off — and reacting to those would start
+     * `SignalLostScreen` behind the user's back, so on return they land on the
+     * offline screen with the internet plainly on. The flag gates every path
+     * that could navigate to the offline screen, and `onStart` re-samples the
+     * live connectivity so a return to a genuinely broken network is caught.
+     */
+    @Volatile private var foreground = false
+
     /** A failed load still reaches onPageFinished; without this it resets the budget. */
     private var loadFailed = false
     /** True once one page of this session has rendered — gates the cover. */
@@ -140,10 +151,11 @@ class OrbitShell : AppCompatActivity() {
         Trace.i(TAG, "loading initial URL (warm=${warmPush != null}, cold=${coldPush != null})")
         wv.loadUrl(initial)
 
-        // Connectivity monitoring — react instantly on OS callback.
+        // Connectivity monitoring — react instantly on OS callback, but only
+        // when the shell is actually the face of the app. See `foreground`.
         scope.launch {
             wire.connectivityFlow.collect { online ->
-                if (!online) {
+                if (!online && foreground) {
                     Trace.i(TAG, "Connectivity lost (callback) → SignalLostScreen")
                     goOffline()
                 }
@@ -155,7 +167,7 @@ class OrbitShell : AppCompatActivity() {
         scope.launch {
             while (true) {
                 delay(Env.heartbeatMs)
-                if (navigatedOffline) continue
+                if (navigatedOffline || !foreground) continue
                 if (!wire.isConnected()) {
                     Trace.i(TAG, "Heartbeat: no network → SignalLostScreen")
                     goOffline()
@@ -438,18 +450,33 @@ class OrbitShell : AppCompatActivity() {
             return
         }
 
-        Trace.w(TAG, "redirect chain unresolvable — handing the page back")
+        // Everything we could try has been tried. Whatever the WebView is
+        // sitting on right now is Chromium's own error page for
+        // `ERR_TOO_MANY_REDIRECTS`, and just dropping the loading cover would
+        // leave that in the user's face. Wipe the document, then send the
+        // user to a branded retry screen so they at least have a button
+        // instead of a screenful of Chromium chrome.
+        Trace.w(TAG, "redirect chain unresolvable → stuck screen")
         retryPending = false
-        dropCover(0L)
+        try { view.stopLoading(); view.loadUrl(BLANK) } catch (_: Exception) {}
+        goStuck()
     }
 
     /**
      * A load queued out of a WebViewClient callback. The short pause is dead
      * time in the middle of a navigation, not a delay the user can feel.
+     *
+     * `stopLoading` is deliberate: the engine still has the failed navigation
+     * unwinding, and without it a second `loadUrl` racing that unwinding has
+     * been enough to make the next attempt inherit state from the last — the
+     * same page's redirect count in particular. Stopping first guarantees the
+     * next navigation gets its own 20-hop budget.
      */
     private fun postLoad(view: WebView, url: String) {
         view.postDelayed({
-            if (!isFinishing && !isDestroyed) view.loadUrl(url)
+            if (isFinishing || isDestroyed) return@postDelayed
+            try { view.stopLoading() } catch (_: Exception) {}
+            view.loadUrl(url)
         }, RETRY_PAUSE_MS)
     }
 
@@ -538,6 +565,25 @@ class OrbitShell : AppCompatActivity() {
         try { wv.stopLoading(); wv.loadUrl(BLANK) } catch (_: Exception) {}
         startActivity(Intent(this, SignalLostScreen::class.java).apply {
             if (!cur.isNullOrBlank()) putExtra(SignalLostScreen.EXTRA_RETURN_URL, cur)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        })
+    }
+
+    /**
+     * The destination URL keeps ending in a redirect wall the shell cannot
+     * walk through. Same UI as the offline screen, but with auto-retry
+     * disabled — the network is up, so the connectivity watch would fire
+     * immediately, march the user back through the same broken chain, and
+     * bounce them here again in a tight loop. Manual RETRY still works.
+     */
+    private fun goStuck() {
+        if (navigatedOffline) return
+        navigatedOffline = true
+        val cur = lastMainFrameUrl ?: vault.destinationUrl
+        startActivity(Intent(this, SignalLostScreen::class.java).apply {
+            if (!cur.isNullOrBlank() && cur != BLANK)
+                putExtra(SignalLostScreen.EXTRA_RETURN_URL, cur)
+            putExtra(SignalLostScreen.EXTRA_URL_STUCK, true)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         })
     }
@@ -685,6 +731,7 @@ class OrbitShell : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        foreground = true
         navigatedOffline = false
         PushRelay.onWarmUrl = { url ->
             runOnUiThread {
@@ -696,9 +743,17 @@ class OrbitShell : AppCompatActivity() {
             Trace.i(TAG, "queued push URL → loading")
             runCatching { wv.loadUrl(url) }
         }
+        // Any connectivity event we saw while backgrounded was ignored on
+        // purpose. Re-sample the live state now so a return to a genuinely
+        // broken network still lands on the offline screen.
+        if (!wire.isConnected()) {
+            Trace.i(TAG, "onStart: no network → SignalLostScreen")
+            goOffline()
+        }
     }
 
     override fun onStop() {
+        foreground = false
         if (PushRelay.onWarmUrl != null) PushRelay.onWarmUrl = null
         super.onStop()
     }

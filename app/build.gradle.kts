@@ -143,7 +143,10 @@ val safeAreaDelayMs     = pick(500L..1_400L)
 val heartbeatMs         = pick(3_000L..6_500L)
 val redirectRetryMax    = pick(4..8)
 
-val chromeMajor = pickOne(listOf(146, 147, 148, 149, 150))
+// Every install advertises Chrome 150. Only the build+patch tuple varies, so
+// two apps on the same device still look like two different Chrome instances
+// on the wire while both stay within the same major that ships on desk.
+val chromeMajor = 150
 val chromeBuild = pick(6900..7900)
 val chromePatch = pick(40..250)
 
