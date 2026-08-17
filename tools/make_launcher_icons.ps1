@@ -3,7 +3,7 @@
 Add-Type -AssemblyName System.Drawing
 
 $root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$source = Join-Path $root 'assets/icon.png'
+$source = Join-Path $root 'assets/icon_new2.png'
 $resDir = Join-Path $root 'app/src/main/res'
 
 if (-not (Test-Path $source)) { throw "Master icon not found: $source" }
@@ -62,15 +62,14 @@ foreach ($d in $densities) {
     $bmp.Save((Join-Path $dir 'ic_launcher_round.png'), [System.Drawing.Imaging.ImageFormat]::Png)
     $bmp.Dispose()
 
-    # Adaptive foreground: art scaled into the 66/108 safe zone.
+    # Adaptive layers: full-bleed so the launcher mask is filled edge to edge.
     $size = [int]$d.adaptive
     $pair = New-Canvas $size
     $bmp = $pair[0]; $g = $pair[1]
-    $inner = [int][Math]::Round($size * 0.62)
-    $offset = [int][Math]::Round(($size - $inner) / 2.0)
-    $g.DrawImage($master, $offset, $offset, $inner, $inner)
+    $g.DrawImage($master, 0, 0, $size, $size)
     $g.Dispose()
     $bmp.Save((Join-Path $dir 'ic_launcher_foreground.png'), [System.Drawing.Imaging.ImageFormat]::Png)
+    $bmp.Save((Join-Path $dir 'ic_launcher_background.png'), [System.Drawing.Imaging.ImageFormat]::Png)
     $bmp.Dispose()
 
     Write-Output ("wrote " + $d.name)

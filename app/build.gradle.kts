@@ -118,7 +118,12 @@ val keyKbLandscape   = pickToken(4, 8)
 
 val jsSafeAreaSentinel = "__" + pickToken(4, 8)
 val jsKeyboardSentinel = "__" + pickToken(4, 8)
-val jsBridgeName       = pickToken(5, 9).replaceFirstChar { it.uppercase() }
+// pickToken can hand back a leading digit, which would make the bridge name an
+// invalid JS identifier. Digits fold onto letters instead of drawing again, so
+// every constant derived after this one keeps its value.
+val jsBridgeName       = pickToken(5, 9).replaceFirstChar { c ->
+    if (c.isDigit()) 'A' + (c - '0') else c.uppercaseChar()
+}
 
 val fcmChannelId    = "ch_" + pickToken(6, 10)
 val fcmChannelTitle = pickOne(listOf(
@@ -165,7 +170,7 @@ android {
 
     defaultConfig {
         applicationId = grayBundleId
-        minSdk = 24
+        minSdk = 30
         targetSdk = 36
         versionCode = grayVersionCode
         versionName = grayVersionName
@@ -281,6 +286,8 @@ android {
             "Game_Name.png",
             "icon.png",
             "icon.webp",
+            "icon_new.png",
+            "icon_new2.png",
             "block_asset_main.webp",
             "button_blank.jpg",
         )

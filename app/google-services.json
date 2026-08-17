@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "718425313285",
+    "project_id": "blockbalance-86623",
+    "storage_bucket": "blockbalance-86623.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718425313285:android:b040f971190c6cd2bf0c6c",
+        "android_client_info": {
+          "package_name": "bp.goalsgames.blockbalance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkxO4uzp_WVperYhlfIgeAQ-y-VMUNsE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,38 +15,30 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import bp.goalsgames.blockbalance.R
 import bp.goalsgames.blockbalance.legal.LegalEndpoints
-import bp.goalsgames.blockbalance.legal.LegalPage
 import bp.goalsgames.blockbalance.ui.components.GhostButton
 import bp.goalsgames.blockbalance.ui.components.ScreenHeader
 import bp.goalsgames.blockbalance.ui.theme.Yard
 
 /**
- * Shows the policy or support page. The bundled copy is used whenever a public
- * address is missing or unreachable, so the buttons work offline and before any
- * domain is live.
+ * Shows the hosted privacy policy. The bundled copy is used when the public
+ * page is unreachable, so the button still works offline.
  */
 @Composable
 fun LegalScreen(
-    page: LegalPage,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val remote = LegalEndpoints.urlFor(page)
-    val local = LegalEndpoints.localUrlFor(page)
-    val title = when (page) {
-        LegalPage.PRIVACY -> stringResource(R.string.legal_privacy_title)
-        LegalPage.SUPPORT -> stringResource(R.string.legal_support_title)
-    }
+    val remote = LegalEndpoints.PRIVACY_URL
+    val local = LegalEndpoints.localUrl()
 
-    val client = remember(page) {
+    val client = remember {
         object : WebViewClient() {
             private var fellBack = false
 
@@ -76,15 +68,13 @@ fun LegalScreen(
     Column(modifier = modifier.background(Yard.night)) {
         Box(modifier = Modifier.statusBarsPadding()) {
             ScreenHeader(
-                title = title.uppercase(),
+                title = stringResource(R.string.legal_privacy_title).uppercase(),
                 onBack = onBack,
                 trailing = {
-                    if (remote != null) {
-                        GhostButton(
-                            label = stringResource(R.string.legal_open_browser),
-                            onClick = { openExternally(context, remote) },
-                        )
-                    }
+                    GhostButton(
+                        label = stringResource(R.string.legal_open_browser),
+                        onClick = { openExternally(context, remote) },
+                    )
                 },
             )
         }
@@ -92,22 +82,16 @@ fun LegalScreen(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
-                .background(if (page == LegalPage.PRIVACY) Color.White else Yard.night),
+                .navigationBarsPadding(),
             factory = { viewContext ->
                 WebView(viewContext).apply {
-                    // Privacy is a light page: a transparent WebView over the
-                    // night chrome makes the body text unreadable.
-                    setBackgroundColor(
-                        if (page == LegalPage.PRIVACY) android.graphics.Color.WHITE
-                        else android.graphics.Color.TRANSPARENT,
-                    )
-                    settings.javaScriptEnabled = remote != null
+                    setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                    settings.javaScriptEnabled = false
                     settings.allowFileAccess = false
                     settings.allowContentAccess = false
-                    settings.domStorageEnabled = remote != null
+                    settings.domStorageEnabled = false
                     webViewClient = client
-                    loadUrl(remote ?: local)
+                    loadUrl(remote)
                 }
             },
             onRelease = { view ->

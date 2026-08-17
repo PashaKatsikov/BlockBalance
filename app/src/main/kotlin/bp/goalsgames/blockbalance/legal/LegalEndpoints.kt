@@ -1,27 +1,16 @@
 package bp.goalsgames.blockbalance.legal
 
-enum class LegalPage(
-    /** Page bundled with the app, always available. */
-    val localAsset: String,
-) {
-    PRIVACY(localAsset = "legal/privacy-policy.html"),
-    SUPPORT(localAsset = "legal/support.html"),
-}
-
 /**
- * Where the policy and support pages live.
- *
- * Live pages are preferred; the bundled copies stay as the offline fallback.
+ * The privacy page is hosted from the public
+ * [PrivacyPolicy_BlockBalance](https://github.com/PashaKatsikov/PrivacyPolicy_BlockBalance)
+ * repo via GitHub Pages. The bundled copy is the offline fallback.
  */
 object LegalEndpoints {
 
-    val PRIVACY_URL: String? = "https://citadelclash.com/privacy-policy.html"
-    val SUPPORT_URL: String? = "https://citadelclash.com/support.html"
+    const val LOCAL_ASSET = "legal/privacy-policy.html"
 
-    fun urlFor(page: LegalPage): String? = when (page) {
-        LegalPage.PRIVACY -> PRIVACY_URL
-        LegalPage.SUPPORT -> SUPPORT_URL
-    }
+    val PRIVACY_URL: String =
+        "https://pashakatsikov.github.io/PrivacyPolicy_BlockBalance/"
 
-    fun localUrlFor(page: LegalPage): String = "file:///android_asset/${page.localAsset}"
+    fun localUrl(): String = "file:///android_asset/$LOCAL_ASSET"
 }

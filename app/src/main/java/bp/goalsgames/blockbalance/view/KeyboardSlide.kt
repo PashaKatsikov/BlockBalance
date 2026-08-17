@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import bp.goalsgames.blockbalance.BuildConfig
 import bp.goalsgames.blockbalance.boot.Store
+import bp.goalsgames.blockbalance.pkg0.Trace
 import kotlin.math.max
 import kotlin.math.min
 
@@ -193,6 +194,7 @@ class KeyboardSlide(private val host: View, private val vault: Store) {
 
     /** A height the keyboard has stopped at is the truth, and worth keeping. */
     private fun settle(height: Int) {
+        if (height != keyboard) Trace.i(TAG, "keyboard $keyboard → $height")
         keyboard = height
         if (height <= 0 || height == settledKb) return
         settledKb = height
@@ -287,6 +289,11 @@ class KeyboardSlide(private val host: View, private val vault: Store) {
                 framed = frame
                 fieldTop = top.toFloat()
                 fieldBottom = bottom.toFloat()
+                Trace.i(
+                    TAG,
+                    "field ${top.toInt()}..${bottom.toInt()} framed=$frame " +
+                            "kb=$keyboard span=${view.height} pan=${offset(view).toInt()}"
+                )
                 if (keyboard > 0) apply(animated = !riding)
             }
         }
@@ -367,8 +374,13 @@ class KeyboardSlide(private val host: View, private val vault: Store) {
             var lift = vv ? vv.offsetTop : 0;
             var zoom = (vv && vv.scale) ? vv.scale : 1;
             var px = (window.devicePixelRatio || 1) * zoom;
+            // Reached through window rather than as a bare name: the bridge is
+            // named per project and may begin with a digit, which parses as a
+            // number and takes the whole injection down with a syntax error.
+            var bridge = window['$bridge'];
+            if (!bridge || !bridge.focus) return;
             try {
-              $bridge.focus(
+              bridge.focus(
                 at.frame,
                 (at.top - lift) * px,
                 (at.bottom - lift + $MARGIN_CSS) * px
@@ -410,6 +422,8 @@ class KeyboardSlide(private val host: View, private val vault: Store) {
     }
 
     private companion object {
+        const val TAG = "KeyboardSlide"
+
         /** Breathing room under the field, in CSS pixels. */
         const val MARGIN_CSS = 10
 

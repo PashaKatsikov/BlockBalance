@@ -2,7 +2,6 @@ package bp.goalsgames.blockbalance.ui
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import bp.goalsgames.blockbalance.legal.LegalPage
 
 sealed interface Destination {
     data object Home : Destination
@@ -11,7 +10,7 @@ sealed interface Destination {
     data object Quests : Destination
     data object Ladder : Destination
     data object Settings : Destination
-    data class Legal(val page: LegalPage) : Destination
+    data object Legal : Destination
 }
 
 /**

@@ -63,7 +63,8 @@ class SignalLostScreen : AppCompatActivity() {
         retryBtn = btn
         btn.setOnClickListener { tryRetry() }
 
-        val lp = FrameLayout.LayoutParams(dpToPx(200), dpToPx(52), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
+        val btnWidthDp = if (isLandscape) 240 else 200
+        val lp = FrameLayout.LayoutParams(dpToPx(btnWidthDp), dpToPx(52), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
         lp.bottomMargin = dpToPx(48)
         btn.layoutParams = lp
         root.addView(btn)

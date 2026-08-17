@@ -76,7 +76,7 @@ fun GameRoot(modifier: Modifier = Modifier) {
                     onQuests = { navigator.go(Destination.Quests) },
                     onLadder = { navigator.go(Destination.Ladder) },
                     onSettings = { navigator.go(Destination.Settings) },
-                    onLegal = { page -> navigator.go(Destination.Legal(page)) },
+                    onPrivacy = { navigator.go(Destination.Legal) },
                     modifier = Modifier.fillMaxSize(),
                 )
 
@@ -112,12 +112,11 @@ fun GameRoot(modifier: Modifier = Modifier) {
                     profile = profile,
                     shell = shell,
                     onBack = { navigator.back() },
-                    onLegal = { page -> navigator.go(Destination.Legal(page)) },
+                    onPrivacy = { navigator.go(Destination.Legal) },
                     modifier = Modifier.fillMaxSize(),
                 )
 
-                is Destination.Legal -> LegalScreen(
-                    page = target.page,
+                Destination.Legal -> LegalScreen(
                     onBack = { navigator.back() },
                     modifier = Modifier.fillMaxSize(),
                 )

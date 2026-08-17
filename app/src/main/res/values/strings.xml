@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Block Balance</string>
 
-    <string name="boot_status">Warming up the yard…</string>
+    <string name="boot_status">Loading</string>
 
     <string name="home_play">PLAY</string>
     <string name="home_bonus">Daily</string>
@@ -10,7 +10,6 @@
     <string name="home_store">Store</string>
     <string name="home_ladder">Ranks</string>
     <string name="home_privacy">Privacy</string>
-    <string name="home_support">Support</string>
 
     <string name="play_build">BUILD</string>
     <string name="play_exit">EXIT</string>
@@ -48,7 +47,6 @@
     <string name="bonus_locked">Come back tomorrow</string>
 
     <string name="legal_privacy_title">Privacy Policy</string>
-    <string name="legal_support_title">Support</string>
     <string name="legal_open_browser">Open in browser</string>
 
     <string name="common_back">Back</string>
